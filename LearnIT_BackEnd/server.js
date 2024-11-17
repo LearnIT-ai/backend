@@ -1,17 +1,14 @@
 const express = require('express');
-const userRoutes = require('./routes/userRoutes');
-require('dotenv').config();
-
 const app = express();
+const userRoutes = require('./routes/userRoutes'); // Підключаємо маршрути для користувачів
 
-// Middleware
-app.use(express.json());
+app.use(express.json()); // Для обробки JSON в тілі запитів
 
-// Routes
+// Підключаємо маршрути
 app.use('/api/users', userRoutes);
 
-// Запуск сервера
+// Визначаємо порт
 const PORT = process.env.PORT || 5050;
 app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+    console.log(`Server running on port ${PORT}`);
 });
