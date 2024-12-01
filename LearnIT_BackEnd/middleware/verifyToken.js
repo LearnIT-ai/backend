@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 
 // Middleware для перевірки токену
+//
 const verifyToken = (req, res, next) => {
     const token = req.headers['authorization']?.split(' ')[1];
     if (!token) {
