@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const userRoutes = require('./routes/userRoutes'); // Маршрути для користувачів
 const aiRoutes = require('./routes/ai'); // Маршрути для взаємодії з AI
 const errorHandler = require('./middleware/errorHandler'); // Обробка помилок
+const aiRoutess = require('./routes/aiRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 5050;
@@ -16,32 +17,23 @@ app.use(bodyParser.json());
 // Маршрути
 app.use('/api/users', userRoutes); // Маршрути для користувачів
 app.use('/api', aiRoutes); // Маршрути для взаємодії з AI
+app.use('/api/ai', aiRoutess);
+
 
 // Маршрут для обробки запитів до AI-сервера
-app.post('/api/ask', async (req, res) => {
-    const { user_message } = req.body;
+app.post('/ask', (req, res) => {
+    console.log(`Received request: ${JSON.stringify(req.body)}`);
+    const { query_text } = req.body;
 
-    if (!user_message) {
-        return res.status(400).json({ error: 'User message is required' });
+    if (!query_text) {
+        console.error('Query text is missing!');
+        return res.status(400).json({ error: 'Query text is required' });
     }
 
-    console.log(`Received user message: ${user_message}`);
-
-    try {
-        const aiResponse = await axios.post(AI_SERVER_URL, { query_text: user_message });
-        console.log('AI server response:', aiResponse.data);
-
-        // Повертаємо відповідь клієнту
-        return res.json({ response: aiResponse.data.response });
-    } catch (error) {
-        console.error('Error communicating with AI server:', error.message);
-
-        return res.status(500).json({
-            error: 'Failed to communicate with AI server',
-            details: error.message,
-        });
-    }
+    console.log(`Processing query: ${query_text}`);
+    res.json({ response: `Processed query: ${query_text}` });
 });
+
 
 // Error Handling Middleware
 app.use(errorHandler);
