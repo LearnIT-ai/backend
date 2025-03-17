@@ -1,10 +1,10 @@
 const pool = require('../config/db');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-
+//
 const registerUser = async (req, res) => {
     const { email, password, full_name, city, role, phone_number } = req.body;
-
+//
     try {
         const hashedPassword = await bcrypt.hash(password, 10);
 

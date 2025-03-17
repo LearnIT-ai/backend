@@ -1,7 +1,7 @@
 const express = require('express');
 const axios = require('axios');
 const router = express.Router();
-
+//
 const AI_SERVERS = {
     compare: 'http://ai-server-compare.com/api/check', // URL першого AI
     analyze: 'http://ai-server-analyze.com/api/analyze', // URL другого AI
@@ -22,7 +22,7 @@ router.post('/compare', async (req, res) => {
         console.error('Error communicating with AI Compare:', error.message);
         res.status(500).json({ error: 'Failed to communicate with AI Compare' });
     }
-});
+});//
 
 // 2️⃣ Аналіз роботи
 router.post('/analyze', async (req, res) => {

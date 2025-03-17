@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-
+//
 // Middleware для перевірки токену
 //
 const verifyToken = (req, res, next) => {

@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 const pool = require('../config/db');
-
+//
 // Middleware для перевірки ролі
 const checkRole = (role) => {
     return (req, res, next) => {
