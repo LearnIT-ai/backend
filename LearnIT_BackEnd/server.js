@@ -1,26 +1,26 @@
 const express = require('express');
-const axios = require('axios');
 const bodyParser = require('body-parser');
-const userRoutes = require('./routes/userRoutes'); // Маршрути для користувачів
-const aiRoutes = require('./routes/ai'); // Маршрути для взаємодії з AI
-const errorHandler = require('./middleware/errorHandler'); // Обробка помилок
-const aiRoutess = require('./routes/aiRoutes');
-
+const cors = require('cors');
 const app = express();
-const PORT = process.env.PORT || 5050;
-const AI_SERVER_URL = 'http://localhost:5000/ask'; // URL AI-сервера
+
+const PORT = process.env.PORT || 5000;
+const AI_SERVER_URL = 'http://127.0.0.1:5050'; // URL FastAPI-сервера
+
+// Імпорт маршрутів
+const userRoutes = require('./routes/userRoutes');
+const aiRoutes = require('./routes/aiRoutes'); // основні AI-рівні (що ти щойно створив)
 
 // Middleware
+app.use(cors());
 app.use(express.json());
 app.use(bodyParser.json());
 
 // Маршрути
-app.use('/api/users', userRoutes); // Маршрути для користувачів
-app.use('/api', aiRoutes); // Маршрути для взаємодії з AI
-app.use('/api/ai', aiRoutess);
+app.use('/api/users', userRoutes); // користувачі
+app.use('/api/ai', aiRoutes);      // AI-проксі FastAPI
+app.use('/api', aiRoutes);         // (залишив, якщо використовуєш паралельно)
 
-
-// Маршрут для обробки запитів до AI-сервера
+// Тимчасовий маршрут для /ask
 app.post('/ask', (req, res) => {
     console.log(`Received request: ${JSON.stringify(req.body)}`);
     const { query_text } = req.body;
@@ -34,8 +34,12 @@ app.post('/ask', (req, res) => {
     res.json({ response: `Processed query: ${query_text}` });
 });
 
+// Error handler (якщо у тебе є окремо)
+const errorHandler = (err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).json({ error: 'Internal server error' });
+};
 
-// Error Handling Middleware
 app.use(errorHandler);
 
 // Запуск сервера

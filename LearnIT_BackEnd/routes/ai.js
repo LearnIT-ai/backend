@@ -2,7 +2,7 @@ const express = require('express');
 const axios = require('axios');
 const router = express.Router();
 
-const AI_SERVER_URL = 'http://localhost:5000'; // URL AI-сервера
+const AI_SERVER_URL = 'http://127.0.0.1:5050'; // URL AI-сервера
 
 router.post('/ai', async (req, res) => {
     try {
