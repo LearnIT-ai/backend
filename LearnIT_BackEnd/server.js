@@ -3,12 +3,14 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const app = express();
 
+
 const PORT = process.env.PORT || 5000;
 const AI_SERVER_URL = 'http://127.0.0.1:5050'; // URL FastAPI-сервера
 
 // Імпорт маршрутів
 const userRoutes = require('./routes/userRoutes');
 const aiRoutes = require('./routes/aiRoutes'); // основні AI-рівні (що ти щойно створив)
+const ai = require('./routes/ai');
 
 // Middleware
 app.use(cors());
@@ -18,7 +20,9 @@ app.use(bodyParser.json());
 // Маршрути
 app.use('/api/users', userRoutes); // користувачі
 app.use('/api/ai', aiRoutes);      // AI-проксі FastAPI
+app.use('/api/aiRoutes', ai);
 app.use('/api', aiRoutes);         // (залишив, якщо використовуєш паралельно)
+
 
 // Тимчасовий маршрут для /ask
 app.post('/ask', (req, res) => {
